@@ -5,7 +5,7 @@ Transporters ist ein Multiplayer Minecraft Spiel, es gibt zwei Teams,zu jedem Te
 ## Teams
 Jedes Team besteht aus mindestens 2,maximal 4 Spielern von denen zufällig ein Spieler zum Transporter ernannt wird und die anderen müssen ihn als Guards beschützen.
 ## Spielstart
-Jeder bekommt Lederstiefel (Schutz I),Lederhose (Schutz I),Lederhelm (Schutz I), Goldbrustpanzer (Haltbarkeit X), Holzschwert (Haltbarkeit X) und 2 gebackene Kartoffeln.Jedes Team spawnt in einer Scheune.Dort wird der Transporter ausgesucht um Goldnuggets, die in der Scheune von einem Dropper gedroppt werden.Es geht sofort los und sie rennen in die Mitte.
+Jeder bekommt Lederstiefel (Schutz I),Lederhose (Schutz I),Lederhelm (Schutz I), Goldbrustpanzer (Haltbarkeit X), Holzschwert (Haltbarkeit X) und 2 gebackene Kartoffeln.Jedes Team spawnt in einer Scheune.Dort wird der Transporter ausgesucht um Goldnuggets, die in der Scheune von einem Dropper gedroppt werden, in den Turm zu bringen.Es geht sofort los.
 ## Spielende
 Nachdem die Goldnuggets in den Turm gebracht wurden,  ist das Spiel zu ende und es gibt ein Feuerwerk,das die Farbe des Gewinnerteams trägt.
 ## Map
