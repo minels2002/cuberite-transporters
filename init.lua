@@ -11,6 +11,7 @@ function Initialize(a_Plugin)
 	-- LoadConfig(a_Plugin:GetLocalFolder() .. "/Config.cfg")
 
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_MOVING, OnPlayerMoving)
+	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_SPAWNED, MyOnPlayerSpawned)
 
 	LOG("Initialized TRANSPORTERS v." .. a_Plugin:GetVersion())
 	return true

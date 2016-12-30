@@ -1,4 +1,11 @@
 
+spawnX = 484
+spawnY = 32
+spawnZ = 174
+
+teamRedHomeX = 428
+teamRedHomeZ = 127
+
 zombiesSpawned = false
 
 function OnPlayerMoving(a_Player, a_OldPosition, a_NewPosition)
@@ -27,6 +34,31 @@ function OnPlayerMoving(a_Player, a_OldPosition, a_NewPosition)
 
       end
     end
+
+
+  -- add gold to inventory of player
+      if (a_NewPosition.x >= teamRedHomeX and
+          a_NewPosition.x <= teamRedHomeX+1 and
+          a_NewPosition.z >= teamRedHomeZ and
+          a_NewPosition.z <= teamRedHomeZ+2) then
+
+      World:BroadcastChat(PlayerName .. " picked up a gold nugget, good luck for the transport!")
+
+      local inventory = a_Player:GetInventory();
+      local item = cItem(E_ITEM_GOLD_NUGGET);
+      inventory:AddItem(item);
+    end
+
+  return false
+end
+
+function MyOnPlayerSpawned(a_Player)
+  local PlayerName  = a_Player:GetName()
+  local World       = a_Player:GetWorld()
+
+  a_Player:TeleportToCoords(spawnX, spawnY, spawnZ);
+
+  World:BroadcastChat(PlayerName .. " welcome to TRANSPORTERS!")
 
   return false
 end
