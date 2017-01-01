@@ -4,6 +4,8 @@ spawnY = 32
 spawnZ = 174
 
 -- TEAM READ
+teamRed = nil
+
 teamRedHomeX = 428
 teamRedHomeZ = 127
 
@@ -12,6 +14,8 @@ teamRedDropPointY = 39
 teamRedDropPointZ = 213
 
 -- TEAM BLUE
+teamBlue = nil
+
 teamBlueHomeX = 427
 teamBlueHomeZ = 214
 
@@ -21,6 +25,13 @@ teamBlueDropPointZ = 133
 
 
 zombiesSpawned = false
+
+function OnWorldStarted(World)
+    scoreboard = World:GetScoreBoard()
+    scoreboard:RegisterObjective('items_transported', 'Items transported', otStat);
+    teamRed = scoreboard:RegisterTeam('red', 'Team Red', '', '');
+    teamBlue = scoreboard:RegisterTeam('blue', 'Team Blue', '', '');
+end
 
 function OnPlayerMoving(Player, OldPosition, NewPosition)
   local PlayerName  = Player:GetName()
@@ -114,7 +125,7 @@ function OnPlayerMoving(Player, OldPosition, NewPosition)
   return false
 end
 
-function MyOnPlayerSpawned(Player)
+function OnPlayerSpawned(Player)
   local PlayerName  = Player:GetName()
   local World       = Player:GetWorld()
 

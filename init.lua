@@ -10,8 +10,9 @@ function Initialize(a_Plugin)
 	-- Load the config.
 	-- LoadConfig(a_Plugin:GetLocalFolder() .. "/Config.cfg")
 
+	cPluginManager:AddHook(cPluginManager.HOOK_WORLD_STARTED, OnWorldStarted);
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_MOVING, OnPlayerMoving)
-	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_SPAWNED, MyOnPlayerSpawned)
+	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_SPAWNED, OnPlayerSpawned)
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_BREAKING_BLOCK, OnPlayerBreakingBlock)
 	cPluginManager:AddHook(cPluginManager.HOOK_COLLECTING_PICKUP, OnCollectingPickup)
 
