@@ -4,8 +4,6 @@ spawnY = 32
 spawnZ = 174
 
 -- TEAM READ
-teamRed = nil
-
 teamRedHomeX = 428
 teamRedHomeZ = 127
 
@@ -14,8 +12,6 @@ teamRedDropPointY = 39
 teamRedDropPointZ = 213
 
 -- TEAM BLUE
-teamBlue = nil
-
 teamBlueHomeX = 427
 teamBlueHomeZ = 214
 
@@ -27,10 +23,24 @@ teamBlueDropPointZ = 133
 zombiesSpawned = false
 
 function OnWorldStarted(World)
-    scoreboard = World:GetScoreBoard()
-    scoreboard:RegisterObjective('items_transported', 'Items transported', otStat);
-    teamRed = scoreboard:RegisterTeam('red', 'Team Red', '', '');
-    teamBlue = scoreboard:RegisterTeam('blue', 'Team Blue', '', '');
+    World:SetDaylightCycleEnabled(false)
+    World:SetTimeOfDay(12000)
+
+    local scoreboard = World:GetScoreBoard()
+
+    scoreboard:RegisterTeam('red', 'Team Red', 'test', 'test');
+    scoreboard:RegisterTeam('blue', 'Team Blue', '', '');
+
+    teamRed = scoreboard:GetTeam('red');
+    teamBlue = scoreboard:GetTeam('blue');
+
+    numTeams = scoreboard:GetNumTeams()
+
+    scoreboard:RegisterObjective('items_transport', 'Items transported', 6);
+
+    scoreboard:SetDisplay('items_transport', 1)
+
+    LOG("Scoreboard initialized with " .. numTeams .. " teams...");
 end
 
 function OnPlayerMoving(Player, OldPosition, NewPosition)
@@ -103,6 +113,10 @@ function OnPlayerMoving(Player, OldPosition, NewPosition)
       if (not inventory:HasItems(item)) then
         World:BroadcastChat(PlayerName .. " picked up a gold nugget, good luck for the transport!")
         inventory:AddItem(item);
+
+        local scoreboard = World:GetScoreBoard()
+        local objective = scoreboard:GetObjective("items_transport")
+        objective:AddScore(PlayerName, 1)
       end
     end
 
@@ -119,6 +133,10 @@ function OnPlayerMoving(Player, OldPosition, NewPosition)
     if (inventory:HasItems(item)) then
       World:BroadcastChat(PlayerName .. " completed transport! Congratulation!")
       inventory:RemoveItem(item);
+
+      local scoreboard = World:GetScoreBoard()
+      local objective = scoreboard:GetObjective("items_transport")
+      objective:AddScore(PlayerName, 1)
     end
   end
 
@@ -132,6 +150,8 @@ function OnPlayerSpawned(Player)
   Player:TeleportToCoords(spawnX, spawnY, spawnZ);
 
   World:BroadcastChat(PlayerName .. " welcome to TRANSPORTERS!")
+
+  teamBlue:AddPlayer(PlayerName)
 
   return false
 end
