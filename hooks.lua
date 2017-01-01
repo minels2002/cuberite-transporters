@@ -6,42 +6,46 @@ spawnZ = 174
 teamRedHomeX = 428
 teamRedHomeZ = 127
 
+teamRedDropPointX = 519
+teamRedDropPointY = 39
+teamRedDropPointZ = 213
+
 zombiesSpawned = false
 
-function OnPlayerMoving(a_Player, a_OldPosition, a_NewPosition)
-  local PlayerName  = a_Player:GetName()
-  local World       = a_Player:GetWorld()
+function OnPlayerMoving(Player, OldPosition, NewPosition)
+  local PlayerName  = Player:GetName()
+  local World       = Player:GetWorld()
 
   local             x = 0.5
   local             y = 66
 
-  -- TempMessage = PlayerName .. "is moving x=" .. a_NewPosition.x
+  -- TempMessage = PlayerName .. "is moving x=" .. NewPosition.x
   -- World:BroadcastChat(TempMessage)
 
     if (not zombiesSpawned) then
-        if (a_NewPosition.x >= x and
-            a_NewPosition.x <= x+2 and
-            a_NewPosition.y >= y and
-            a_NewPosition.y <= y+2) then
+        if (NewPosition.x >= x and
+            NewPosition.x <= x+2 and
+            NewPosition.y >= y and
+            NewPosition.y <= y+2) then
 
         World:BroadcastChat(PlayerName .. " attacked by our zombie army")
 
-        World:SpawnMob(a_NewPosition.x + 2, a_NewPosition.y, a_NewPosition.z, mtZombie)
-        World:SpawnMob(a_NewPosition.x - 2, a_NewPosition.y, a_NewPosition.z, mtZombie)
-        World:SpawnMob(a_NewPosition.x, a_NewPosition.y + 2, a_NewPosition.z, mtZombie)
-        World:SpawnMob(a_NewPosition.x, a_NewPosition.y - 2, a_NewPosition.z, mtZombie)
+        World:SpawnMob(NewPosition.x + 2, NewPosition.y, NewPosition.z, mtZombie)
+        World:SpawnMob(NewPosition.x - 2, NewPosition.y, NewPosition.z, mtZombie)
+        World:SpawnMob(NewPosition.x, NewPosition.y + 2, NewPosition.z, mtZombie)
+        World:SpawnMob(NewPosition.x, NewPosition.y - 2, NewPosition.z, mtZombie)
         zombiesSpawned = true
 
       end
     end
 
   -- add gold to inventory of player
-      if (a_NewPosition.x >= teamRedHomeX and
-          a_NewPosition.x <= teamRedHomeX+1 and
-          a_NewPosition.z >= teamRedHomeZ and
-          a_NewPosition.z <= teamRedHomeZ+2) then
+    if (NewPosition.x >= teamRedHomeX and
+        NewPosition.x <= teamRedHomeX+1 and
+        NewPosition.z >= teamRedHomeZ and
+        NewPosition.z <= teamRedHomeZ+2) then
 
-      local inventory = a_Player:GetInventory();
+      local inventory = Player:GetInventory();
       local item = cItem(E_ITEM_GOLD_NUGGET);
 
       if (not inventory:HasItems(item)) then
@@ -50,14 +54,30 @@ function OnPlayerMoving(a_Player, a_OldPosition, a_NewPosition)
       end
     end
 
+  -- check if drop point has been reaeched and remove gold nugget from inventory
+  if (NewPosition.x >= teamRedDropPointX and
+      NewPosition.x <= teamRedDropPointX+1 and
+      NewPosition.y >= teamRedDropPointY and
+      NewPosition.z >= teamRedDropPointZ and
+      NewPosition.z <= teamRedDropPointZ+2) then
+
+    local inventory = Player:GetInventory();
+    local item = cItem(E_ITEM_GOLD_NUGGET);
+
+    if (inventory:HasItems(item)) then
+      World:BroadcastChat(PlayerName .. " completed transport! Congratulation!")
+      inventory:RemoveItem(item);
+    end
+  end
+
   return false
 end
 
-function MyOnPlayerSpawned(a_Player)
-  local PlayerName  = a_Player:GetName()
-  local World       = a_Player:GetWorld()
+function MyOnPlayerSpawned(Player)
+  local PlayerName  = Player:GetName()
+  local World       = Player:GetWorld()
 
-  a_Player:TeleportToCoords(spawnX, spawnY, spawnZ);
+  Player:TeleportToCoords(spawnX, spawnY, spawnZ);
 
   World:BroadcastChat(PlayerName .. " welcome to TRANSPORTERS!")
 
@@ -65,9 +85,6 @@ function MyOnPlayerSpawned(a_Player)
 end
 
 function OnPlayerBreakingBlock(Player, BlockX, BlockY, BlockZ, BlockFace, BlockType, BlockMeta)
-  local PlayerName  = Player:GetName()
-  local World       = Player:GetWorld()
-
   -- do not allow player to break blocks
   return true
 end
