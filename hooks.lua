@@ -3,12 +3,22 @@ spawnX = 484
 spawnY = 32
 spawnZ = 174
 
+-- TEAM READ
 teamRedHomeX = 428
 teamRedHomeZ = 127
 
 teamRedDropPointX = 519
 teamRedDropPointY = 39
 teamRedDropPointZ = 213
+
+-- TEAM BLUE
+teamBlueHomeX = 427
+teamBlueHomeZ = 214
+
+teamBlueDropPointX = 518
+teamBlueDropPointY = 38
+teamBlueDropPointZ = 133
+
 
 zombiesSpawned = false
 
@@ -39,7 +49,7 @@ function OnPlayerMoving(Player, OldPosition, NewPosition)
       end
     end
 
-  -- add gold to inventory of player
+  -- TEAM RED: add gold to inventory of player
     if (NewPosition.x >= teamRedHomeX and
         NewPosition.x <= teamRedHomeX+1 and
         NewPosition.z >= teamRedHomeZ and
@@ -54,12 +64,43 @@ function OnPlayerMoving(Player, OldPosition, NewPosition)
       end
     end
 
-  -- check if drop point has been reaeched and remove gold nugget from inventory
+  -- TEAM RED: check if drop point has been reaeched and remove gold nugget from inventory
   if (NewPosition.x >= teamRedDropPointX and
       NewPosition.x <= teamRedDropPointX+1 and
       NewPosition.y >= teamRedDropPointY and
       NewPosition.z >= teamRedDropPointZ and
       NewPosition.z <= teamRedDropPointZ+2) then
+
+    local inventory = Player:GetInventory();
+    local item = cItem(E_ITEM_GOLD_NUGGET);
+
+    if (inventory:HasItems(item)) then
+      World:BroadcastChat(PlayerName .. " completed transport! Congratulation!")
+      inventory:RemoveItem(item);
+    end
+  end
+
+  -- TEAM BLUE: add gold to inventory of player
+    if (NewPosition.x >= teamBlueHomeX and
+        NewPosition.x <= teamBlueHomeX+1 and
+        NewPosition.z >= teamBlueHomeZ and
+        NewPosition.z <= teamBlueHomeZ+2) then
+
+      local inventory = Player:GetInventory();
+      local item = cItem(E_ITEM_GOLD_NUGGET);
+
+      if (not inventory:HasItems(item)) then
+        World:BroadcastChat(PlayerName .. " picked up a gold nugget, good luck for the transport!")
+        inventory:AddItem(item);
+      end
+    end
+
+  -- TEAM BLUE: check if drop point has been reaeched and remove gold nugget from inventory
+  if (NewPosition.x >= teamBlueDropPointX and
+      NewPosition.x <= teamBlueDropPointX+1 and
+      NewPosition.y >= teamBlueDropPointY and
+      NewPosition.z >= teamBlueDropPointZ and
+      NewPosition.z <= teamBlueDropPointZ+2) then
 
     local inventory = Player:GetInventory();
     local item = cItem(E_ITEM_GOLD_NUGGET);
