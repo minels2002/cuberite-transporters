@@ -35,18 +35,19 @@ function OnPlayerMoving(a_Player, a_OldPosition, a_NewPosition)
       end
     end
 
-
   -- add gold to inventory of player
       if (a_NewPosition.x >= teamRedHomeX and
           a_NewPosition.x <= teamRedHomeX+1 and
           a_NewPosition.z >= teamRedHomeZ and
           a_NewPosition.z <= teamRedHomeZ+2) then
 
-      World:BroadcastChat(PlayerName .. " picked up a gold nugget, good luck for the transport!")
-
       local inventory = a_Player:GetInventory();
       local item = cItem(E_ITEM_GOLD_NUGGET);
-      inventory:AddItem(item);
+
+      if (not inventory:HasItems(item)) then
+        World:BroadcastChat(PlayerName .. " picked up a gold nugget, good luck for the transport!")
+        inventory:AddItem(item);
+      end
     end
 
   return false
@@ -61,4 +62,29 @@ function MyOnPlayerSpawned(a_Player)
   World:BroadcastChat(PlayerName .. " welcome to TRANSPORTERS!")
 
   return false
+end
+
+function OnPlayerBreakingBlock(Player, BlockX, BlockY, BlockZ, BlockFace, BlockType, BlockMeta)
+  local PlayerName  = Player:GetName()
+  local World       = Player:GetWorld()
+
+  -- do not allow player to break blocks
+  return true
+end
+
+function OnCollectingPickup(Player, Pickup)
+  local PlayerName  = Player:GetName()
+  local World       = Player:GetWorld()
+
+  local inventory = Player:GetInventory();
+  local item = Pickup:GetItem();
+  local goldNuggetItem = cItem(E_ITEM_GOLD_NUGGET);
+
+  if (not inventory:HasItems(item) and goldNuggetItem:IsSameType(item)) then
+    World:BroadcastChat(PlayerName .. " picked up a gold nugget, good luck for the transport!")
+    return false
+  end
+
+  Player:SendMessage("Sorry, you can only carry one gold nugget at a time!")
+  return true
 end
